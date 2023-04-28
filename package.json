@@ -6,6 +6,7 @@
   "engines": {
     "node": "16.x"
   },
+  "installManager": "pnpm",
   "scripts": {
     "dev": "electron .",
     "rebuild:electron": "electron-rebuild",
