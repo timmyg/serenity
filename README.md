@@ -1,7 +1,35 @@
-## Serenity
+## Electron + TypeScript + React
 
-##### Development
+Boilerplate for a project using Electron, React and Typescript.
 
-Build iohook natively for electron. [this](https://github.com/wilix-team/iohook) is the main repo but [this fork](https://github.com/MystK/iohook) is updated more recently. Try cloning the fork and running `npm i` then `npm run build`, and a new build should show up under `builds`.
+## Installation
 
-For example, on my m1 macbook it creates `builds/electron-v110-darwin-arm64`. It may take some debugging to build natively, and you'll need to copy and paste it into `node_modules/iohook/builds`.
+Use a package manager of your choice (npm, yarn, etc.) in order to install all dependencies
+
+```bash
+yarn
+```
+
+## Usage
+
+Just run `start` script.
+
+```bash
+yarn start
+```
+
+## Packaging
+
+To generate the project package based on the OS you're running on, just run:
+
+```bash
+yarn package
+```
+
+## Contributing
+
+Pull requests are always welcome 😃.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
