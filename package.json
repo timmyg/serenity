@@ -2,12 +2,17 @@
   "name": "serenity",
   "version": "0.1.0",
   "description": "A break reminder app",
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "tsc",
+    "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
+    "@types/electron": "1.6.10",
+    "@types/node": "20.1.5",
     "electron": "22.2.1",
-    "iohook": "github:MystK/iohook#v1.0.1"
+    "iohook": "github:MystK/iohook#v1.0.1",
+    "typescript": "5.0.4"
   }
 }

@@ -1,17 +1,17 @@
 window.addEventListener("DOMContentLoaded", () => {
-  const eventDataElem = document.getElementById("event-data");
+  const eventDataElem = document.getElementById("event-data") as HTMLElement;
 
-  ioHook.start();
+  (window as any).ioHook.start();
 
-  ioHook.on("keydown", (event) => {
+  (window as any).ioHook.on("keydown", (event: any) => {
     eventDataElem.textContent = ` Keydown event: ${event.keycode}`;
   });
 
-  ioHook.on("mouseclick", (event) => {
+  (window as any).ioHook.on("mouseclick", (event: any) => {
     eventDataElem.textContent = `Mouseclick event: ${event.x}, ${event.y}`;
   });
 
-  ioHook.on("mousemove", (event) => {
+  (window as any).ioHook.on("mousemove", (event: any) => {
     eventDataElem.textContent = `Mousemove event: ${event.x}, ${event.y}`;
   });
 });

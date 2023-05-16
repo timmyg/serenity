@@ -1,8 +1,12 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
-const path = require("path");
+import { app, BrowserWindow, ipcMain } from "electron";
+import * as path from "path";
+import * as ioHook2 from "iohook";
 const ioHook = require("iohook");
+console.log({ ioHook, ioHook2 });
 
-function createWindow() {
+let mainWindow: BrowserWindow | null;
+
+function createWindow(): void {
   console.log("PREELOAD", path.join(__dirname, "preload.js"));
   mainWindow = new BrowserWindow({
     width: 800,
@@ -10,31 +14,32 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      // preload: path.join(__dirname, "preload.js"),
       preload: path.join(__dirname, "preload.js"),
     },
   });
 
-  mainWindow.loadFile("index.html");
+  // mainWindow.loadFile("index.html");
+  // mainWindow.loadFile(path.join(__dirname, "index.html"));
+  mainWindow.loadFile(path.join(__dirname, "index.html"));
 
   mainWindow.on("closed", function () {
     mainWindow = null;
   });
 }
 
-ioHook.on("keydown", (event) => {
+ioHook.on("keydown", (event: any) => {
   console.log({ event });
   console.log(String.fromCharCode(event.keycode));
   console.log("keydown");
-  mainWindow.webContents.send(
+  mainWindow?.webContents.send(
     "iohook-keydown",
     String.fromCharCode(event.keycode)
   );
 });
 
-ioHook.on("mousemove", (event) => {
+ioHook.on("mousemove", (event: any) => {
   console.log("mousemove");
-  mainWindow.webContents.send("iohook-mousemove", { x: event.x, y: event.y });
+  mainWindow?.webContents.send("iohook-mousemove", { x: event.x, y: event.y });
 });
 
 ioHook.start();
