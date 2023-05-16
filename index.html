@@ -2,22 +2,18 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Electron App</title>
+    <title>iohook Demo</title>
   </head>
   <body>
-    <h1>Keyboard and Mouse Movements</h1>
-    <button id="accessibility">Enable Accessibility</button>
-    <div id="output"></div>
-    <script>
-      document.getElementById("accessibility").addEventListener("click", () => {
-        window.electron.send("enable-iohook");
-        window.iohook.start();
-      });
-
-      window.electron.on("iohook-event", (data) => {
-        const output = document.getElementById("output");
-        output.innerHTML += JSON.stringify(data) + "<br>";
-      });
-    </script>
+    <h1>iohook Demo</h1>
+    <p>Press any key or move the mouse to see the event data:</p>
+    <pre id="event-data"></pre>
+    <script src="renderer.js"></script>
   </body>
 </html>
+
+<script>
+  // window.ioHook.on("keydown", (event) => {
+  //   console.log("Keydown event:", event);
+  // });
+</script>

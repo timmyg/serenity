@@ -1,40 +1,50 @@
-const { app, BrowserWindow } = require("electron");
-const iohook = require("iohook");
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
+const ioHook = require("iohook");
 
 function createWindow() {
-  const win = new BrowserWindow({
+  console.log("PREELOAD", path.join(__dirname, "preload.js"));
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: __dirname + "/preload.js",
+      // preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
-  win.loadFile("index.html");
+  mainWindow.loadFile("index.html");
 
-  iohook.on("mousemove", (event) => {
-    console.log("mousemove");
-    win.webContents.send("iohook-event", event);
-  });
-
-  iohook.on("keydown", (event) => {
-    console.log("keydown");
-    win.webContents.send("iohook-event", event);
-  });
-
-  win.on("close", () => {
-    iohook.unload();
-  });
-
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  mainWindow.on("closed", function () {
+    mainWindow = null;
   });
 }
 
-app.on("ready", createWindow);
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+ioHook.on("keydown", (event) => {
+  console.log({ event });
+  console.log(String.fromCharCode(event.keycode));
+  console.log("keydown");
+  mainWindow.webContents.send(
+    "iohook-keydown",
+    String.fromCharCode(event.keycode)
+  );
 });
+
+ioHook.on("mousemove", (event) => {
+  console.log("mousemove");
+  mainWindow.webContents.send("iohook-mousemove", { x: event.x, y: event.y });
+});
+
+ioHook.start();
+
+ipcMain.on("iohook-start", () => {
+  ioHook.start();
+});
+
+ipcMain.on("iohook-stop", () => {
+  ioHook.stop();
+});
+
+app.whenReady().then(createWindow);

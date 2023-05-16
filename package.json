@@ -1,33 +1,13 @@
 {
   "name": "serenity",
   "version": "0.1.0",
-  "description": "",
+  "description": "A break reminder app",
   "main": "main.js",
-  "engines": {
-    "node": "16.x"
-  },
-  "installManager": "yarn",
   "scripts": {
-    "dev": "electron .",
-    "electron:rebuild": "electron-rebuild -f -w iohook -v 24.1.3 -a arm64",
-    "electron:build": "electron-builder"
+    "start": "electron ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "supportedTargets": [
-    [
-      "electron",
-      "22.2.0",
-      "110"
-    ]
-  ],
   "devDependencies": {
-    "@electron/rebuild": "3.2.13",
-    "electron": "22.2.0",
-    "electron-rebuild": "3.2.9"
-  },
-  "dependencies": {
-    "iohook": "0.9.3"
+    "electron": "22.2.1",
+    "iohook": "github:MystK/iohook#v1.0.1"
   }
 }
