@@ -4,9 +4,8 @@
   "description": "A break reminder app",
   "main": "dist/main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "tsc",
-    "postinstall": "electron-builder install-app-deps"
+    "start": "npm run build && electron .",
+    "build": "tsc && cp public/index.html dist/index.html"
   },
   "devDependencies": {
     "@types/electron": "1.6.10",

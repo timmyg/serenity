@@ -1,8 +1,15 @@
+// This is the main entry point of your Electron application. It is
+// responsible for creating the application window and handling
+// system events. It runs in the main process and has full Node.js
+// and Electron API access. You can do things like control the
+// application lifecycle, create and control browser windows,
+// and handle system-level operations in this script.
+
 import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
-import * as ioHook2 from "iohook";
+// import * as ioHook2 from "iohook";
 const ioHook = require("iohook");
-console.log({ ioHook, ioHook2 });
+// console.log({ ioHook, ioHook2 });
 
 let mainWindow: BrowserWindow | null;
 
