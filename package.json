@@ -1,27 +1,33 @@
 {
-  "name": "serenity-20",
-  "version": "1.0.0",
+  "name": "serenity",
+  "version": "0.1.0",
   "description": "",
   "main": "main.js",
   "engines": {
     "node": "16.x"
   },
-  "installManager": "pnpm",
+  "installManager": "yarn",
   "scripts": {
     "dev": "electron .",
-    "rebuild:electron": "electron-rebuild",
-    "clean": "pnpm i && pnpm rebuild:electron"
+    "electron:rebuild": "electron-rebuild -f -w iohook -v 24.1.3 -a arm64",
+    "electron:build": "electron-builder"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "supportedTargets": [
+    [
+      "electron",
+      "22.2.0",
+      "110"
+    ]
+  ],
   "devDependencies": {
     "@electron/rebuild": "3.2.13",
-    "electron": "24.1.3",
-    "husky": "8.0.3"
+    "electron": "22.2.0",
+    "electron-rebuild": "3.2.9"
   },
   "dependencies": {
-    "robotjs": "0.6.0",
-    "yargs": "17.7.2"
+    "iohook": "0.9.3"
   }
 }

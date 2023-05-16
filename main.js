@@ -1,8 +1,5 @@
-// main.js
-
-const { app, BrowserWindow, ipcMain } = require("electron");
-const path = require("path");
-const robot = require("robotjs");
+const { app, BrowserWindow } = require("electron");
+const iohook = require("iohook");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -11,86 +8,33 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.js"),
+      preload: __dirname + "/preload.js",
     },
   });
 
   win.loadFile("index.html");
+
+  iohook.on("mousemove", (event) => {
+    console.log("mousemove");
+    win.webContents.send("iohook-event", event);
+  });
+
+  iohook.on("keydown", (event) => {
+    console.log("keydown");
+    win.webContents.send("iohook-event", event);
+  });
+
+  win.on("close", () => {
+    iohook.unload();
+  });
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
 }
 
-app.whenReady().then(createWindow);
+app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  if (process.platform !== "darwin") app.quit();
 });
-
-app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
-
-// Handle the requestMousePosition event
-ipcMain.on("requestMousePosition", (event) => {
-  setInterval(() => {
-    const mousePosition = robot.getMousePos();
-    event.sender.send("receiveMousePosition", mousePosition);
-  }, 100);
-});
-
-// Handle the requestKeyPress event
-// ipcMain.on("requestKeyPress", (event) => {
-// Define the keys you want to detect
-//   const keysToDetect = [
-//     "a",
-//     "b",
-//     "c",
-//     "d",
-//     "e",
-//     "f",
-//     "g",
-//     "h",
-//     "i",
-//     "j",
-//     "k",
-//     "l",
-//     "m",
-//     "n",
-//     "o",
-//     "p",
-//     "q",
-//     "r",
-//     "s",
-//     "t",
-//     "u",
-//     "v",
-//     "w",
-//     "x",
-//     "y",
-//     "z",
-//     "0",
-//     "1",
-//     "2",
-//     "3",
-//     "4",
-//     "5",
-//     "6",
-//     "7",
-//     "8",
-//     "9",
-//     // "enter",
-//     // "shift",
-//     // "ctrl",
-//     // "alt",
-//   ];
-
-//   setInterval(() => {
-//     for (const key of keysToDetect) {
-//       if (robot.keyToggle(key, "down")) {
-//         event.sender.send("receiveKeyPress", key);
-//       }
-//     }
-//   }, 100);
-// });

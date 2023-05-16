@@ -5,8 +5,19 @@
     <title>Electron App</title>
   </head>
   <body>
-    <h1>Electron App with uiohook-napi</h1>
-    <button id="grant-access-btn">Grant Accessibility</button>
-    <script src="renderer.js"></script>
+    <h1>Keyboard and Mouse Movements</h1>
+    <button id="accessibility">Enable Accessibility</button>
+    <div id="output"></div>
+    <script>
+      document.getElementById("accessibility").addEventListener("click", () => {
+        window.electron.send("enable-iohook");
+        window.iohook.start();
+      });
+
+      window.electron.on("iohook-event", (data) => {
+        const output = document.getElementById("output");
+        output.innerHTML += JSON.stringify(data) + "<br>";
+      });
+    </script>
   </body>
 </html>

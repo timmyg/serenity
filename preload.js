@@ -1,22 +1,19 @@
-// preload.js
-
 const { contextBridge, ipcRenderer } = require("electron");
+// const iohook = require("iohook");
+const iohookPath = require.resolve("iohook");
+const iohook = require(iohookPath);
 
 contextBridge.exposeInMainWorld("electron", {
-  requestMousePosition: () => {
-    ipcRenderer.send("requestMousePosition");
+  send: (channel, data) => {
+    ipcRenderer.send(channel, data);
   },
-  onReceiveMousePosition: (callback) => {
-    ipcRenderer.on("receiveMousePosition", (event, mousePosition) => {
-      callback(mousePosition);
-    });
+  on: (channel, func) => {
+    ipcRenderer.on(channel, (event, ...args) => func(...args));
   },
-  requestKeyPress: () => {
-    ipcRenderer.send("requestKeyPress");
-  },
-  onReceiveKeyPress: (callback) => {
-    ipcRenderer.on("receiveKeyPress", (event, key) => {
-      callback(key);
-    });
+});
+
+contextBridge.exposeInMainWorld("iohook", {
+  start: () => {
+    iohook.start();
   },
 });
