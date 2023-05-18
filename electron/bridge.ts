@@ -21,6 +21,9 @@ const mainApi = {
   sendMessage: (message: string) => {
     ipc.send('message', message)
   },
+  grantAccessibility: (message: string) => {
+    ipc.send('grantaccessibility', true)
+  },
   on: (channel: string, callback: Function) => {
     ipc.on(channel, (_, data) => callback(data))
   },

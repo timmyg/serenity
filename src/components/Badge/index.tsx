@@ -29,15 +29,6 @@ const Container = styled.span<{ status?: string }>`
   background-color: ${props => getStatusColor(props.status)};
 `
 
-export function Badge({
-  status,
-}: // children,
-//  ...props
-BadgeProps) {
-  return (
-    <Container status={status}>
-      {/* {children} */}
-      {status || 'pending'}
-    </Container>
-  )
+export function Badge({ status }: BadgeProps) {
+  return <Container status={status}>{status}</Container>
 }
