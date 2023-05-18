@@ -17,8 +17,7 @@ export function Greetings() {
     window.Main.sendMessage('Hello World')
     window.Main.grantAccessibility(true)
   }
-  const [hasGrantedPermissions, setHasGrantedPermissions] =
-    useState<boolean>(false)
+  const [hasGrantedPermissions, setHasGrantedPermissions] = useState<boolean>()
   const [currentStatus, setCurrentStatus] = useState<'active' | 'inactive'>()
   useEffect(() => {
     // status-event
@@ -51,10 +50,18 @@ export function Greetings() {
         alt="ReactJS logo"
       />
       <br />
-      {currentStatus && <Badge status={currentStatus} />}
-      <Button onClick={handleGrantPermission} disabled={hasGrantedPermissions}>
-        Grant Permission
-      </Button>
+      {currentStatus ? (
+        <Badge status={currentStatus} />
+      ) : (
+        hasGrantedPermissions === false && (
+          <Button
+            onClick={handleGrantPermission}
+            disabled={hasGrantedPermissions}
+          >
+            Grant Permission
+          </Button>
+        )
+      )}
     </Container>
   )
 }

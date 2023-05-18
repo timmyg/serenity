@@ -3,6 +3,8 @@ import { app, BrowserWindow, ipcMain, systemPreferences } from 'electron'
 let mainWindow: BrowserWindow | null
 let ioHook: any = null
 
+let accessibilityCheckInterval: any = null
+let statusCheckInterval: any = null
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
@@ -25,6 +27,7 @@ const setupIOHook = () => {
   ioHook.on('keydown', setActivity)
   ioHook.on('mousemove', setActivity)
   ioHook.on('mouseclick', setActivity)
+  ioHook.on('mousewheel', setActivity)
 
   ioHook.start()
 }
@@ -33,9 +36,14 @@ const sendAccessibiltyPermissionEvent = () => {
   const hasGrantedAccessibilityAccess =
     systemPreferences.isTrustedAccessibilityClient(false)
 
-  if (hasGrantedAccessibilityAccess) {
+  if (hasGrantedAccessibilityAccess && ioHook === null) {
     setupIOHook()
-    setInterval(sendStatusEvent, checkActivitySeconds * 1000)
+    if (!statusCheckInterval) {
+      statusCheckInterval = setInterval(
+        sendStatusEvent,
+        checkActivitySeconds * 1000
+      )
+    }
   }
 
   mainWindow?.webContents.send(
@@ -59,10 +67,23 @@ function createWindow() {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
   mainWindow.on('closed', () => {
+    if (accessibilityCheckInterval) {
+      clearInterval(accessibilityCheckInterval)
+    }
+    if (statusCheckInterval) {
+      clearInterval(statusCheckInterval)
+    }
     mainWindow = null
   })
 
-  mainWindow.once('ready-to-show', sendAccessibiltyPermissionEvent)
+  mainWindow.once('ready-to-show', () => {
+    sendAccessibiltyPermissionEvent()
+
+    // Start the interval
+    accessibilityCheckInterval = setInterval(() => {
+      sendAccessibiltyPermissionEvent()
+    }, checkActivitySeconds * 1000)
+  })
 }
 
 app
