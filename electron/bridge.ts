@@ -1,33 +1,33 @@
-import Electron, { contextBridge, ipcRenderer } from 'electron'
+import Electron, { contextBridge, ipcRenderer } from 'electron';
 
 interface IpcRendererAPI {
-  send: (channel: string, ...args: any[]) => void
+  send: (channel: string, ...args: any[]) => void;
   on: (
     channel: string,
     listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void
-  ) => void
+  ) => void;
 }
 
 const ipc: IpcRendererAPI = {
   send: (channel, ...args) => {
-    ipcRenderer.send(channel, ...args)
+    ipcRenderer.send(channel, ...args);
   },
   on: (channel, listener) => {
-    ipcRenderer.on(channel, listener)
+    ipcRenderer.on(channel, listener);
   },
-}
+};
 
 const mainApi = {
   sendMessage: (message: string) => {
-    ipc.send('message', message)
+    ipc.send('message', message);
   },
-  grantAccessibility: (message: string) => {
-    ipc.send('grantaccessibility', true)
+  grantAccessibility: () => {
+    ipc.send('grantaccessibility', true);
   },
   on: (channel: string, callback: Function) => {
-    ipc.on(channel, (_, data) => callback(data))
+    ipc.on(channel, (_, data) => callback(data));
   },
-}
+};
 
 // const ioHookApi = {
 // start: () => ipc.send('iohook-start'),
@@ -40,5 +40,5 @@ const mainApi = {
 // },
 // }
 
-contextBridge.exposeInMainWorld('Main', mainApi)
+contextBridge.exposeInMainWorld('Main', mainApi);
 // contextBridge.exposeInMainWorld('ioHook', ioHookApi)

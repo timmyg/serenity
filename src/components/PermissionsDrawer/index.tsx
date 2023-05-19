@@ -7,17 +7,12 @@ import Box from '@mui/material/Box';
 
 interface SimpleDrawerProps {
   isOpen: boolean;
-  hasGrantedPermissions: boolean;
+  hasGrantedPermissions: boolean | undefined;
   onClose: () => void;
 }
 
 function SimpleDrawer(props: SimpleDrawerProps) {
   const { isOpen, hasGrantedPermissions, onClose } = props;
-  // const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(isOpen);
-
-  // useEffect(() => {
-  //   setIsDrawerOpen(isOpen);
-  // }, [isOpen]);
 
   function handleGrantPermission() {
     // window.Main.sendMessage('Hello World')
@@ -57,7 +52,7 @@ function SimpleDrawer(props: SimpleDrawerProps) {
 
 interface PermissionsDrawerProps {
   isOpen: boolean;
-  hasGrantedPermissions: boolean;
+  hasGrantedPermissions: boolean | undefined;
   onClose: () => void;
 }
 
