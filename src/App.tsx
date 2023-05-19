@@ -3,7 +3,14 @@ import { GlobalStyle } from './styles/GlobalStyle';
 
 import { Home } from './components/Home';
 import { PaletteMode, ThemeProvider, createTheme } from '@mui/material';
-import { amber, deepOrange, grey } from '@mui/material/colors';
+import {
+  amber,
+  deepOrange,
+  grey,
+  green,
+  yellow,
+  red,
+} from '@mui/material/colors';
 import { createContext, useMemo, useState } from 'react';
 // import { ThemeSwitcher } from './components/ThemeSwitcher';
 
@@ -53,11 +60,17 @@ export function App() {
   const getDesignTokens = (mode: ThemeMode) => ({
     palette: {
       mode,
+      status: {
+        active: red[300],
+        inactive: green[300],
+        unknown: grey[300],
+      },
       ...(mode === 'light'
         ? {
             // palette values for light mode
             primary: amber,
             divider: amber[200],
+
             text: {
               primary: grey[900],
               secondary: grey[800],

@@ -14,8 +14,9 @@ export function ThemeSwitcher(props: Props) {
     <IconButton
       sx={{
         position: 'absolute',
-        top: 0, // Position from the top
-        right: 0, // Position from the right
+        top: 0,
+        right: 0,
+        marginTop: 0,
       }}
       onClick={onToggle}
       color="inherit"

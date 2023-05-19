@@ -17,7 +17,7 @@ const setActivity = () => {
 
 const sendStatusEvent = () => {
   const status = isActive ? 'active' : 'inactive';
-  console.log({ isActive });
+  // console.log({ isActive });
   mainWindow?.webContents.send('status-event', status);
   isActive = false;
 };

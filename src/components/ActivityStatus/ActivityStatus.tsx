@@ -1,20 +1,26 @@
 import CircleIcon from '@mui/icons-material/Circle';
 import { Status } from '../Home';
+import { useTheme } from '@mui/material';
 
 interface ActivityStatusProps {
   status: Status;
 }
 
 export function ActivityStatus(props: ActivityStatusProps) {
+  const theme = useTheme();
+  console.log({ theme });
   const getStatusColor = () => {
     switch (props.status) {
       case 'active':
-        return 'green';
+        // @ts-ignore
+        return theme.palette.status.active;
       case 'inactive':
-        return 'gray';
+        // @ts-ignore
+        return theme.palette.status.inactive;
       case undefined:
       default:
-        return 'yellow';
+        // @ts-ignore
+        return theme.palette.status.unknown;
     }
   };
 
