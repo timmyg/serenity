@@ -1,17 +1,11 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { GlobalStyle } from './styles/GlobalStyle';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 import { Home } from './components/Home';
-import {
-  IconButton,
-  PaletteMode,
-  ThemeProvider,
-  createTheme,
-} from '@mui/material';
+import { PaletteMode, ThemeProvider, createTheme } from '@mui/material';
 import { amber, deepOrange, grey } from '@mui/material/colors';
 import { createContext, useMemo, useState } from 'react';
+// import { ThemeSwitcher } from './components/ThemeSwitcher';
 
 // const theme = createTheme({
 //   palette: {
@@ -51,10 +45,12 @@ import { createContext, useMemo, useState } from 'react';
 //   // },
 // });
 
-const ColorModeContext = createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+
+export type ThemeMode = PaletteMode;
 
 export function App() {
-  const getDesignTokens = (mode: PaletteMode) => ({
+  const getDesignTokens = (mode: ThemeMode) => ({
     palette: {
       mode,
       ...(mode === 'light'
@@ -107,12 +103,12 @@ export function App() {
     },
   });
 
-  const [mode, setMode] = useState<PaletteMode>('light');
+  const [mode, setMode] = useState<ThemeMode>('light');
   const colorMode = useMemo(
     () => ({
       // The dark mode switch would invoke this method
       toggleColorMode: () => {
-        setMode((prevMode: PaletteMode) =>
+        setMode((prevMode: ThemeMode) =>
           prevMode === 'light' ? 'dark' : 'light'
         );
       },
@@ -130,24 +126,6 @@ export function App() {
           <CssBaseline />
           <GlobalStyle />
           <Home />
-          <>
-            {/* {theme.palette.mode} mode */}
-            <IconButton
-              sx={{
-                position: 'absolute',
-                top: 0, // Position from the top
-                right: 0, // Position from the right
-              }}
-              onClick={colorMode.toggleColorMode}
-              color="inherit"
-            >
-              {theme.palette.mode === 'dark' ? (
-                <Brightness7Icon />
-              ) : (
-                <Brightness4Icon />
-              )}
-            </IconButton>
-          </>
         </ThemeProvider>
       </ColorModeContext.Provider>
     </>
