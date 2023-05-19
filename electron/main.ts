@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain, systemPreferences } from 'electron';
+import { IpcChannel } from './bridge';
 
 let mainWindow: BrowserWindow | null;
 let ioHook: any = null;

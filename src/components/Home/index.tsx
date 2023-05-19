@@ -6,6 +6,7 @@ import { Button, Skeleton, useTheme } from '@mui/material';
 import { ActivityStatus } from '../ActivityStatus';
 import { ThemeSwitcher } from '../ThemeSwitcher';
 import { ColorModeContext } from '../../App';
+import { ElectronChannel } from '../../../electron/main';
 
 export type Status = 'active' | 'inactive' | undefined;
 

@@ -8,6 +8,13 @@ interface IpcRendererAPI {
   ) => void;
 }
 
+export enum IpcChannel {
+  // eslint-disable-next-line no-unused-vars
+  message = 'message',
+  // eslint-disable-next-line no-unused-vars
+  grantAccessibility = 'grantAccessibility',
+}
+
 const ipc: IpcRendererAPI = {
   send: (channel, ...args) => {
     ipcRenderer.send(channel, ...args);

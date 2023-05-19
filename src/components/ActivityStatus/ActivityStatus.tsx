@@ -8,7 +8,6 @@ interface ActivityStatusProps {
 
 export function ActivityStatus(props: ActivityStatusProps) {
   const theme = useTheme();
-  console.log({ theme });
   const getStatusColor = () => {
     switch (props.status) {
       case 'active':
