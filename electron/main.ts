@@ -1,5 +1,7 @@
 import { app, BrowserWindow, ipcMain, systemPreferences } from 'electron';
-import { IpcChannel } from './bridge';
+// import { IpcChannel } from './bridge';
+import { grey } from '@mui/material/colors';
+import { Status } from '../src/components/Home/Home';
 
 let mainWindow: BrowserWindow | null;
 let ioHook: any = null;
@@ -9,7 +11,13 @@ let statusCheckInterval: any = null;
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
+export type StatusEvent = {
+  status: Status;
+  timestamp: Date;
+};
+
 const checkActivitySeconds = 1;
+const checkPermissionsSeconds = 2;
 let isActive = false;
 
 const setActivity = () => {
@@ -17,9 +25,12 @@ const setActivity = () => {
 };
 
 const sendStatusEvent = () => {
-  const status = isActive ? 'active' : 'inactive';
-  // console.log({ isActive });
-  mainWindow?.webContents.send('status-event', status);
+  const status: Status = isActive ? 'active' : 'inactive';
+  const statusEvent: StatusEvent = {
+    status,
+    timestamp: new Date(),
+  };
+  mainWindow?.webContents.send('status-event', statusEvent);
   isActive = false;
 };
 
@@ -34,11 +45,11 @@ const setupIOHook = () => {
   ioHook.start();
 };
 
-const sendAccessibiltyPermissionEvent = () => {
-  const hasGrantedAccessibilityAccess =
+const checkAccessibiltyPermissionEvent = () => {
+  const initialHasGrantedAccessibilityAccess =
     systemPreferences.isTrustedAccessibilityClient(false);
 
-  if (hasGrantedAccessibilityAccess && ioHook === null) {
+  if (initialHasGrantedAccessibilityAccess && ioHook === null) {
     setupIOHook();
     if (!statusCheckInterval) {
       statusCheckInterval = setInterval(
@@ -48,10 +59,26 @@ const sendAccessibiltyPermissionEvent = () => {
     }
   }
 
+  // TODO, prob a better way to do this
+  accessibilityCheckInterval = setInterval(() => {
+    const hasGrantedAccessibilityAccess =
+      systemPreferences.isTrustedAccessibilityClient(false);
+    if (
+      initialHasGrantedAccessibilityAccess !== hasGrantedAccessibilityAccess
+    ) {
+      console.debug(
+        'reloading due to permission change, does not reload gracefully locally'
+      );
+      // mainWindow?.reload();
+      app.relaunch();
+      app.quit(); // the application will be closed as soon as possible
+    }
+  }, checkPermissionsSeconds * 1000);
+
   // console.log({ hasGrantedAccessibilityAccess, ioHook });
   mainWindow?.webContents.send(
     'has-accessibility-permission',
-    hasGrantedAccessibilityAccess
+    initialHasGrantedAccessibilityAccess
   );
 };
 
@@ -59,7 +86,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1100,
     height: 700,
-    backgroundColor: '#191622',
+    backgroundColor: grey[500],
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -80,13 +107,7 @@ function createWindow() {
   });
 
   mainWindow.once('ready-to-show', () => {
-    sendAccessibiltyPermissionEvent();
-
-    // Start the interval
-    // TODO, prob dont need to do this every 2 seconds
-    accessibilityCheckInterval = setInterval(() => {
-      sendAccessibiltyPermissionEvent();
-    }, checkActivitySeconds * 2000);
+    checkAccessibiltyPermissionEvent();
   });
 }
 
@@ -96,13 +117,12 @@ app
   .then(() => {
     ipcMain.on(
       'check-accessibility-permissions',
-      sendAccessibiltyPermissionEvent
+      checkAccessibiltyPermissionEvent
     );
     // ipcMain.on('message', (_, message) => {
     //   console.log({ message });
     // });
     ipcMain.on('grantaccessibility', (_, message) => {
-      // console.log({ message });
       setupIOHook();
     });
   })

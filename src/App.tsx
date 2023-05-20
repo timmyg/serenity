@@ -1,56 +1,10 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { GlobalStyle } from './styles/GlobalStyle';
 
-import { Home } from './components/Home';
 import { PaletteMode, ThemeProvider, createTheme } from '@mui/material';
-import {
-  amber,
-  deepOrange,
-  grey,
-  green,
-  yellow,
-  red,
-} from '@mui/material/colors';
+import { amber, indigo, grey, green, purple } from '@mui/material/colors';
 import { createContext, useMemo, useState } from 'react';
-// import { ThemeSwitcher } from './components/ThemeSwitcher';
-
-// const theme = createTheme({
-//   palette: {
-//     mode: 'dark',
-//   },
-//   typography: {
-//     fontFamily: [
-//       'Poppins',
-//       '-apple-system',
-//       'BlinkMacSystemFont',
-//       '"Segoe UI"',
-//       'Roboto',
-//       '"Helvetica Neue"',
-//       'Arial',
-//       'sans-serif',
-//       '"Apple Color Emoji"',
-//       '"Segoe UI Emoji"',
-//       '"Segoe UI Symbol"',
-//     ].join(','),
-//   },
-//   components: {
-//     // Name of the component
-//     MuiButtonBase: {
-//       defaultProps: {
-//         // The props to change the default for.
-//         disableRipple: true, // No more ripple, on the whole application 💣!
-//       },
-//     },
-//   },
-//   // palette: {
-//   //   primary: {
-//   //     main: '#1976d2',
-//   //   },
-//   //   secondary: {
-//   //     main: '#dc004e',
-//   //   },
-//   // },
-// });
+import Home from './components/Home';
 
 export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
@@ -61,7 +15,7 @@ export function App() {
     palette: {
       mode,
       status: {
-        active: red[300],
+        active: purple[300],
         inactive: green[300],
         unknown: grey[300],
       },
@@ -78,11 +32,11 @@ export function App() {
           }
         : {
             // palette values for dark mode
-            primary: deepOrange,
-            divider: deepOrange[700],
+            primary: indigo,
+            divider: indigo[700],
             background: {
-              default: deepOrange[900],
-              paper: deepOrange[900],
+              default: indigo[900],
+              paper: indigo[900],
             },
             text: {
               primary: '#fff',

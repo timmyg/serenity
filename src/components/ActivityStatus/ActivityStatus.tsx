@@ -1,6 +1,6 @@
 import CircleIcon from '@mui/icons-material/Circle';
-import { Status } from '../Home';
 import { useTheme } from '@mui/material';
+import { Status } from '../Home/Home';
 
 interface ActivityStatusProps {
   status: Status;
