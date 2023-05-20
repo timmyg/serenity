@@ -16,7 +16,7 @@ export type StatusEvent = {
   timestamp: Date;
 };
 
-const checkActivitySeconds = 1;
+const checkActivitySeconds = 2;
 const checkPermissionsSeconds = 2;
 let isActive = false;
 
@@ -30,6 +30,7 @@ const sendStatusEvent = () => {
     status,
     timestamp: new Date(),
   };
+  console.log('sending...', new Date());
   mainWindow?.webContents.send('status-event', statusEvent);
   isActive = false;
 };
@@ -45,11 +46,26 @@ const setupIOHook = () => {
   ioHook.start();
 };
 
-const checkAccessibiltyPermissionEvent = () => {
+const checkAccessibility = () => {
   const initialHasGrantedAccessibilityAccess =
     systemPreferences.isTrustedAccessibilityClient(false);
 
-  if (initialHasGrantedAccessibilityAccess && ioHook === null) {
+  // console.log({ hasGrantedAccessibilityAccess, ioHook });
+  mainWindow?.webContents.send(
+    'has-accessibility-permission',
+    initialHasGrantedAccessibilityAccess
+  );
+};
+
+const startActivityChecker = () => {
+  console.log('START CHECKER');
+  const initialHasGrantedAccessibilityAccess =
+    systemPreferences.isTrustedAccessibilityClient(false);
+
+  if (
+    initialHasGrantedAccessibilityAccess
+    // && ioHook === null
+  ) {
     setupIOHook();
     if (!statusCheckInterval) {
       statusCheckInterval = setInterval(
@@ -74,12 +90,6 @@ const checkAccessibiltyPermissionEvent = () => {
       app.quit(); // the application will be closed as soon as possible
     }
   }, checkPermissionsSeconds * 1000);
-
-  // console.log({ hasGrantedAccessibilityAccess, ioHook });
-  mainWindow?.webContents.send(
-    'has-accessibility-permission',
-    initialHasGrantedAccessibilityAccess
-  );
 };
 
 function createWindow() {
@@ -106,8 +116,11 @@ function createWindow() {
     mainWindow = null;
   });
 
+  mainWindow.on('ready-to-show', () => {
+    checkAccessibility();
+  });
   mainWindow.once('ready-to-show', () => {
-    checkAccessibiltyPermissionEvent();
+    startActivityChecker();
   });
 }
 
@@ -115,10 +128,7 @@ app
   .on('ready', createWindow)
   .whenReady()
   .then(() => {
-    ipcMain.on(
-      'check-accessibility-permissions',
-      checkAccessibiltyPermissionEvent
-    );
+    ipcMain.on('check-accessibility-permissions', startActivityChecker);
     // ipcMain.on('message', (_, message) => {
     //   console.log({ message });
     // });

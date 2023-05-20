@@ -2,7 +2,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { GlobalStyle } from './styles/GlobalStyle';
 
 import { PaletteMode, ThemeProvider, createTheme } from '@mui/material';
-import { amber, indigo, grey, green, purple } from '@mui/material/colors';
+import { amber, grey, green, purple } from '@mui/material/colors';
 import { createContext, useMemo, useState } from 'react';
 import Home from './components/Home';
 
@@ -32,11 +32,11 @@ export function App() {
           }
         : {
             // palette values for dark mode
-            primary: indigo,
-            divider: indigo[700],
+            primary: grey,
+            divider: grey[700],
             background: {
-              default: indigo[900],
-              paper: indigo[900],
+              default: grey[900],
+              paper: grey[900],
             },
             text: {
               primary: '#fff',
