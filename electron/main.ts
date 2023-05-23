@@ -30,7 +30,7 @@ const sendStatusEvent = () => {
     status,
     timestamp: new Date(),
   };
-  console.log('sending...', new Date());
+  // console.log('sending...', new Date());
   mainWindow?.webContents.send('status-event', statusEvent);
   isActive = false;
 };

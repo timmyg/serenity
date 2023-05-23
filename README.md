@@ -1,21 +1,21 @@
-## Electron + TypeScript + React
+## Serenity
 
-Boilerplate for a project using Electron, React and Typescript.
+A native (desktop + laptop) app for reminding you to take breaks based on your generalized keyboard and mouse activity.
 
-## Installation
+### Development
 
-Use a package manager of your choice (npm, yarn, etc.) in order to install all dependencies
+##### Install Dependencies
 
 ```bash
-yarn
+npm i
 ```
 
-## Usage
+> Note: Building iohook can be hard as it uses native OS functionality. See [README-IOHOOK.md](./README-IOHOOK.md)
 
-Just run `start` script.
+##### Run App
 
 ```bash
-yarn start
+npm start
 ```
 
 ## Packaging
@@ -23,13 +23,7 @@ yarn start
 To generate the project package based on the OS you're running on, just run:
 
 ```bash
-yarn package
+npm package
 ```
 
-## Contributing
-
-Pull requests are always welcome 😃.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+> Note: This has not been tested
